@@ -2,16 +2,12 @@ module ActionView #:nodoc:
   module Helpers #:nodoc:
     module NestedLayoutsHelper
       # Wrap part of the template into layout.
-      #
-      # If layout doesn't contain '/' then corresponding layout template
-      # is searched in default folder ('app/views/layouts'), otherwise
-      # it is searched relative to controller's template root directory
-      # ('app/views/' by default).
+      # All layout files must be in app/views/layouts.
       def inside_layout(layout, &block)
-        layout = layout.include?('/') ? layout : "layouts/#{layout}"
+        layout = Dir.entries('app/views/layouts').detect { |a| /#{layout}/.match(a) }
         @template.instance_variable_set('@content_for_layout', capture(&block))
         concat(
-          @template.render( :file => "#{RAILS_ROOT}/app/views/#{layout}.html.erb", :user_full_path => true ),
+          @template.render(:file => "#{RAILS_ROOT}/app/views/layouts/#{layout}", :user_full_path => true),
           block.binding
         )
       end
