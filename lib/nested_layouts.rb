@@ -1,6 +1,7 @@
 module ActionView #:nodoc:
   module Helpers #:nodoc:
     module NestedLayoutsHelper
+      # Binding is only required if we're running less than Rails 2.2
       BINDING_REQUIRED = !!((Object.const_defined?(:Rails) && Rails.respond_to?(:version) ? 
           Rails.version : RAILS_GEM_VERSION) < '2.2.0')
 
